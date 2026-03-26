@@ -1,4 +1,4 @@
-# Kevin Thompson — Security Engineer & AI Systems Architect
+# KF.TAN - The Light Architect
 
 Building production AI infrastructure that makes security engineering faster, more rigorous, and more accessible. Everything ships as [Model Context Protocol](https://modelcontextprotocol.io/) servers — the open standard for connecting AI models to tools and data.
 
