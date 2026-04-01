@@ -42,13 +42,7 @@ Rust. MCP over stdio. Native binaries under 20MB each. Runs as a [Claude Code pl
 
 ---
 
-## Open Source
-
-| Repo | What |
-|------|------|
-| [LIGHTARCHITECT-AGENT-GYM](https://github.com/TheLightArchitects/LIGHTARCHITECT-AGENT-GYM) | Test harness for AI agent tool-use |
-
-### Upstream contributions
+## Contributions
 
 | Repo | PR | What |
 |------|-----|------|
