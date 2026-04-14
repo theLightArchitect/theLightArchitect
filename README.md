@@ -46,9 +46,9 @@ Rust. MCP over stdio. Native binaries under 20MB each. Runs as a [Claude Code pl
 
 | Repo | PR | What |
 |------|-----|------|
-| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | [#76](https://github.com/anthropics/claude-code-security-review/pull/76) | Deprecated model was silently killing AI filtering — fixed |
-| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | [#77](https://github.com/anthropics/claude-code-security-review/pull/77) | Supply chain security category (CVEs, typosquatting, lock file integrity) |
-| [anthropics/skills](https://github.com/anthropics/skills) | [#498](https://github.com/anthropics/skills/pull/498) | 4-phase security audit skill |
+| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | [#92](https://github.com/anthropics/claude-code-security-review/pull/92) | Deprecated model was silently killing AI filtering — fixed |
+| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | [#93](https://github.com/anthropics/claude-code-security-review/pull/93) | Supply chain security category (CVEs, typosquatting, lock file integrity) |
+| [anthropics/skills](https://github.com/anthropics/skills) | [#935](https://github.com/anthropics/skills/pull/935) | 4-phase security audit skill |
 
 ---
 
