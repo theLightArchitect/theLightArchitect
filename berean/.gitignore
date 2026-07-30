@@ -1,0 +1,16 @@
+# Rust
+engine/target/
+
+# Python
+agents/**/__pycache__/
+agents/.venv/
+agents/*.egg-info/
+agents/.pytest_cache/
+
+# Local env files
+**/.env
+
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/*.tfstate*
+infra/terraform/terraform.tfvars
