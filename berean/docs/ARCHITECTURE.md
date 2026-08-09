@@ -28,21 +28,68 @@ unchanged, just under new branding).
   embeddings. Corpus-plus-commentary scale doesn't need a separate vector DB;
   that's an optimization for later if it's ever needed.
 
+## Primary agent design
+
+The root agent (`berean_orchestrator`) is not just a router — it's the "face"
+of the app, and it owns cognitive/behavioral discipline of its own, on top of
+delegating to specialists:
+
+- **Calibrated epistemic layering.** Every answer keeps four tiers visibly
+  separate rather than blurring them into one confident paragraph: what the
+  text says (verbatim, near-zero uncertainty) → what it meant to its original
+  audience (historical-critical) → what the historic church has concluded
+  (whole-counsel, labeled by consensus) → how it might apply to this person
+  (explicitly the lowest-confidence tier).
+- **Theological Theory of Mind.** Can model how a Reformed, Catholic,
+  Orthodox, or Pentecostal reader would each approach a passage without
+  adopting any of them as its own voice — this is what makes whole-counsel
+  mode more than three commentary summaries stapled together.
+- **Socratic restraint.** Optimized to make the user a better searcher of
+  scripture, not dependent on the agent — sometimes the right response to a
+  growing believer is a well-aimed question, not an answer.
+- **Doubt as first-class.** Not optimized to convert or resolve — equally
+  good at sitting with a skeptic's unresolved doubt as at deepening a mature
+  believer's understanding. Honesty over resolution is what earns trust with
+  "the curious on the fence."
+- **Pastoral-signal triage.** Calls `detect_pastoral_signal` on every message
+  before responding. The tool currently always returns `classified: false` —
+  by design, that must be read as "use the conservative default tone," never
+  as "confirmed no concern." Real crisis content (self-harm, abuse, acute
+  despair) routes to encouraging real human help, not a theology answer.
+- **Self-adversarial pass.** Before finalizing an interpretive or doctrinal
+  claim, the agent checks what a careful critic would say is overstated —
+  cheap with Flash-tier, and what actually enforces epistemic layering rather
+  than just hoping the prompt worked.
+- **Continuity via journal.** Uses `read_journal`/`write_journal` to recall a
+  user's past questions and notes. `write_journal` currently always returns
+  `persisted: false` — the agent must say so honestly, not imply a save that
+  didn't happen.
+- **Guardrails.** Explicitly states it isn't a replacement for a pastor,
+  counselor, real community, or the Holy Spirit's work. Never optimizes for
+  engagement or for making the user feel good at the expense of honesty.
+
 ## Agent topology
 
 ```
-Root/Orchestrator Agent (Gemini 3.1 Pro)
-  ├─ routes by: reading-altitude (new believer → elder/scholar),
+Root/Orchestrator Agent — "Berean" (Gemini 3.1 Pro)
+  │  tools: detect_pastoral_signal, read_journal, write_journal
+  │  routes by: reading-altitude (new believer → elder/scholar),
   │             mode (devotional / skeptic / scholar / sermon-check)
   │
   ├─ Grounding Agent — the ONLY agent allowed to surface verbatim scripture
-  │   text. Wraps VertexAiSearchTool over the verified corpus. The root
-  │   agent may never answer with scripture text from its own weights.
+  │   text. Wraps VertexAiSearchTool over the verified corpus, plus
+  │   lookup_manuscript_variants and compare_translations (tier-1 fidelity:
+  │   what the text says, including where manuscripts/translations genuinely
+  │   disagree). The root agent may never answer with scripture text from
+  │   its own weights.
   │
   ├─ Whole-Counsel Agent — on contested topics (soteriology, eschatology,
-  │   church polity, sacraments...), queries tradition-tagged commentary and
-  │   returns multiple positions with consensus labels:
-  │   near-universal consensus / denominationally contested / minority view.
+  │   church polity, sacraments...), queries tradition-tagged commentary plus
+  │   lookup_confession (primary creeds/catechisms/confessions) and
+  │   search_patristics (the pre-denominational church fathers, kept
+  │   separate from modern commentary), returning multiple positions with
+  │   consensus labels: near-universal consensus / denominationally
+  │   contested / minority view.
   │
   ├─ Skeptic-Mode Agent — no faith presupposed; engages objections
   │   (apparent contradictions, textual history, science, problem of evil)
@@ -61,6 +108,10 @@ Root/Orchestrator Agent (Gemini 3.1 Pro)
       Reference-not-found.
 ```
 
+Every Berean Engine tool belongs to exactly one agent's contract (enforced by
+`agents/tests/test_agent_wiring.py`) — no two agents share a tool, so it's
+always clear which agent is accountable for a given claim.
+
 Model tiering: **Gemini 3.1 Pro** for the orchestrator and Whole-Counsel
 synthesis (real reasoning over conflicting sources), **Gemini 3.6 Flash** for
 specialized sub-agent generation, **Gemini 3.5 Flash-Lite** for cheap
@@ -69,14 +120,30 @@ high-volume work (routing, claim extraction).
 ## The Rust core (Berean Engine)
 
 The one part where correctness is non-negotiable — verbatim retrieval,
-citation contracts, the cross-reference graph, lexicon data — is built as a
-Rust MCP server (`engine/`), following the same quality bar as the rest of
-the Light Architects stack (no silent failures, no fabricated output). ADK
+citation contracts, the cross-reference graph, lexicon data, and the safety
+contracts for pastoral triage and journal persistence — is built as a Rust
+MCP server (`engine/`), following the same quality bar as the rest of the
+Light Architects stack (no silent failures, no fabricated output). ADK
 agents call it as a tool alongside `VertexAiSearchTool`.
 
-Contract: every lookup either returns text/data with its exact source, or an
-explicit "not found" — never a guess. `engine/src/corpus.rs` has a unit test
-enforcing this for the passage lookup.
+Ten tools, each with its own contract module and enforcing unit test:
+
+| Tool | Module | Contract |
+|---|---|---|
+| `lookup_passage` | `corpus.rs` | text or `found: false` — never a guess |
+| `lookup_crossrefs` | `crossref.rs` | curated vs. `ai_suggested` always separate |
+| `lookup_lexicon` | `lexicon.rs` | entry or `found: false` |
+| `lookup_manuscript_variants` | `criticism.rs` | `checked: false` means "not consulted," never "no variants" |
+| `lookup_confession` | `confessions.rs` | verbatim text or `found: false` |
+| `search_patristics` | `patristics.rs` | citations or empty — never invented |
+| `compare_translations` | `translations.rs` | `notable_divergence` only when actually confirmed |
+| `detect_pastoral_signal` | `pastoral.rs` | `classified: false` — never defaults to "confirmed safe" |
+| `read_journal` | `journal.rs` | real entries or empty — never fabricated history |
+| `write_journal` | `journal.rs` | `persisted: false` until real storage exists — never claims a save that didn't happen |
+
+The common thread: every tool distinguishes "we don't know yet" from "we
+checked and it's clear" — and the agent layer is instructed to treat those
+as different things, not collapse them.
 
 ## Deployment shape
 

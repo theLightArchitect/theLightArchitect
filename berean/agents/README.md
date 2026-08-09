@@ -27,6 +27,11 @@ If you've built the Berean Engine (`../engine`), point at the binary:
 export BEREAN_ENGINE_BIN=../engine/target/release/berean-engine
 ```
 
+With `BEREAN_ENGINE_BIN` set, every agent's `McpToolset` will actually spawn
+and talk to the real engine binary — including in `pytest`, if you exercise
+`McpToolset.get_tools()` directly (the shipped tests don't, so they run
+without the binary present; see the note in `tests/test_agent_wiring.py`).
+
 ## Run
 
 ```bash

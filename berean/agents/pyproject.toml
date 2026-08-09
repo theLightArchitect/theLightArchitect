@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Project Berean's multi-agent system, built on ADK and deployed to the Gemini Enterprise Agent Platform."
 requires-python = ">=3.11"
 dependencies = [
-    "google-adk>=1.0.0",
+    "google-adk[mcp]>=1.0.0",
 ]
 
 [project.optional-dependencies]
