@@ -42,6 +42,12 @@ Rust. MCP over stdio. Native binaries under 20MB each. Runs as a [Claude Code pl
 
 ---
 
+## Open source
+
+- **[larc-sanitize](https://github.com/TheLightArchitects/larc-sanitize)** — LLM input-safety toolkit in Rust. Prompt-injection defense (Unicode-confusable normalization, role-marker + tool-use-tag stripping) and secret/PII redaction, extracted from my agentic CLI. 46 tests, `clippy -D warnings` clean, Apache-2.0, CI-green — clone it, `cargo test`, run the demo.
+
+---
+
 ## Contributions
 
 | Repo | PR | What |
