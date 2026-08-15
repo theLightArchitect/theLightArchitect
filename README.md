@@ -63,7 +63,7 @@ Rust. MCP over stdio. Native binaries under 20MB each. Runs as a [Claude Code pl
 
 Sr. Technical Support Engineer at Palo Alto Networks (Cortex XSOAR/XSIAM) during the day.
 
-After hours I write the platform above. 7 Rust MCP servers, a typed SDK, a gateway with routing presets, and a knowledge graph that persists across sessions. 50K+ lines, 1,400+ tests, built solo. Every agent holds itself to the same standards I'd hold a team to — no `.unwrap()`, no `panic!()`, complexity limits enforced, clippy pedantic as errors.
+After hours I write the platform above. 7 Rust MCP servers, a typed SDK, a gateway with routing presets, and a knowledge graph that persists across sessions, plus LightShell, a separate 157K-line agentic coding CLI. Over 200K lines of Rust and 5,000+ tests across all of it, built solo. Every agent holds itself to the same standards I'd hold a team to — no `.unwrap()`, no `panic!()`, complexity limits enforced, clippy pedantic as errors.
 
 I built all of it because I needed it. The security scanning exists because I review code daily. The investigation agent exists because I debug production incidents. The knowledge graph exists because I got tired of re-explaining context every session. Nothing here is theoretical.
 
