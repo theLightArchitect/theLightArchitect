@@ -1,70 +1,10 @@
 # KFT
 
-**Security engineer. Rust. AI tooling.**
+**Security engineer that likes Rust, and builts Complex AI Infrastructure Systems.**
 
-I make the [Light Architects](https://github.com/TheLightArchitects) platform — AI agents for [Claude Code](https://claude.ai/code) that do security reviews, enforce code quality, run investigations, and keep memory across sessions.
-
----
-
-## Light Architects
-
-One plugin. Six agents. Each one does a different job.
-
-```
-/plugin install lightarchitects@light-architects
-```
-
-| Agent | Job |
-|-------|-----|
-| **CORSO** | Catches security issues, enforces quality gates, blocks bad code |
-| **EVA** | Runs CI/CD, manages deploys, keeps session memory |
-| **SOUL** | Knowledge graph — your agents remember things between conversations |
-| **QUANTUM** | Digs into bugs, pulls from multiple sources, tests hypotheses |
-| **SERAPH** | Pentests your code within defined scope — won't go rogue |
-| **AYIN** | Traces every call, flags anomalies, tells you what broke and when |
-
-### Presets
-
-Pick a team composition. Swap anytime.
-
-```
-/SQUAD security        # pentest + appsec + forensics
-/SQUAD code_review     # quality + logic checks
-/SQUAD research        # investigation + multi-source
-/SQUAD solo            # just quality gates + memory
-```
-
-12 presets. Switch mid-session.
+I've built the [Light Architects](https://github.com/TheLightArchitects) platform — AI agents for every harnesses that do security reviews, enforce code quality, run investigations, and preserves context across sessions.
 
 ### Stack
 
-Rust. MCP over stdio. Native binaries under 20MB each. Runs as a [Claude Code plugin](https://claude.ai/code).
-
----
-
-## Open source
-
-- **[LightShell](https://github.com/theLightArchitect/lightshell)**: my agentic coding CLI + TUI in Rust on Claude & MCP. Source-available showcase: 345 files, ~157K lines, 4,100+ tests, Tool Search deferred loading, instant-resume sessions, a tmux-like session daemon.
-- **[larc-sanitize](https://github.com/TheLightArchitects/larc-sanitize)**: LLM input-safety toolkit in Rust. Prompt-injection defense (Unicode-confusable normalization, role-marker + tool-use-tag stripping) and secret/PII redaction, extracted from my agentic CLI. 46 tests, `clippy -D warnings` clean, Apache-2.0, CI-green. Clone it, `cargo test`, run the demo.
-
----
-
-## Contributions
-
-| Repo | PR | What |
-|------|-----|------|
-| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | [#92](https://github.com/anthropics/claude-code-security-review/pull/92) | Deprecated model was silently killing AI filtering — fixed |
-| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | [#93](https://github.com/anthropics/claude-code-security-review/pull/93) | Supply chain security category (CVEs, typosquatting, lock file integrity) |
-| [anthropics/skills](https://github.com/anthropics/skills) | [#935](https://github.com/anthropics/skills/pull/935) | 4-phase security audit skill |
-
----
-
-## About
-
-Sr. Technical Support Engineer at Palo Alto Networks (Cortex XSOAR/XSIAM) during the day.
-
-After hours I write the platform above. 7 Rust MCP servers, a typed SDK, a gateway with routing presets, and a knowledge graph that persists across sessions, plus LightShell, a separate 157K-line agentic coding CLI. Over 200K lines of Rust and 5,000+ tests across all of it, built solo. Every agent holds itself to the same standards I'd hold a team to — no `.unwrap()`, no `panic!()`, complexity limits enforced, clippy pedantic as errors.
-
-I built all of it because I needed it. The security scanning exists because I review code daily. The investigation agent exists because I debug production incidents. The knowledge graph exists because I got tired of re-explaining context every session. Nothing here is theoretical.
-
-**Languages used**: Rust / Python / TypeScript / Lean 4
+MBP M4 48GB RAM. Personal Rust-based Agent Harness named LightShell, with GUI companion named LightSpace.
+Claude Code and Grok Build are my everyday developer harnesses. 
